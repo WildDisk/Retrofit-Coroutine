@@ -18,6 +18,7 @@ class UsersAdapter(var items: List<User>) : RecyclerView.Adapter<UsersAdapter.Vi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
         holder.itemView.setOnClickListener {
+            userId = items[position].mId
             val intent = Intent(it.context, UserDetailActivity::class.java)
             intent.putExtra(USER_ID, userId)
             it.context.startActivity(intent)
@@ -28,7 +29,6 @@ class UsersAdapter(var items: List<User>) : RecyclerView.Adapter<UsersAdapter.Vi
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(item: User) = with(itemView) {
-            userId = item.mId
             tvUserId?.text = item.mId.toString()
             tvUserName?.text = item.mName
             tvUserUsername?.text = item.mUsername
