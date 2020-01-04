@@ -1,5 +1,6 @@
 package ru.wilddisk.retrofitcoroutine.ui.adapter
 
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,18 @@ class CommentsAdapter(var items: List<Comment>) :
         LayoutInflater.from(parent.context).inflate(R.layout.comments_item, parent, false)
     )
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position])
+        holder.itemView.setOnClickListener {
+            val rippleEffect = TypedValue()
+            it.context.theme.resolveAttribute(
+                android.R.attr.selectableItemBackground,
+                rippleEffect,
+                true
+            )
+            it.setBackgroundResource(rippleEffect.resourceId)
+        }
+    }
 
     override fun getItemCount() = items.size
 

@@ -1,6 +1,7 @@
 package ru.wilddisk.retrofitcoroutine.ui.adapter
 
 import android.content.Intent
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,13 @@ class UsersAdapter(var items: List<User>) : RecyclerView.Adapter<UsersAdapter.Vi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
         holder.itemView.setOnClickListener {
+            val rippleEffect = TypedValue()
+            it.context.theme.resolveAttribute(
+                android.R.attr.selectableItemBackground,
+                rippleEffect,
+                true
+            )
+            it.setBackgroundResource(rippleEffect.resourceId)
             userId = items[position].mId
             val intent = Intent(it.context, UserDetailActivity::class.java)
             intent.putExtra(USER_ID, userId)
