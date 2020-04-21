@@ -1,6 +1,9 @@
 package ru.wilddisk.retrofitcoroutine.ui.fragment
 
+import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,12 +18,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import ru.wilddisk.retrofitcoroutine.R
+import ru.wilddisk.retrofitcoroutine.model.User
 import ru.wilddisk.retrofitcoroutine.network.api.JsonApi
+import ru.wilddisk.retrofitcoroutine.ui.activity.UserDetailActivity
 import ru.wilddisk.retrofitcoroutine.ui.adapter.UsersAdapter
 
-class UsersFragment(private var mContext: Context) : Fragment() {
+class UsersFragment(private var mContext: Context) : Fragment(),
+    UsersAdapter.ItemUserClickListener {
     private val jsonApi = JsonApi.apiFactory()
-    private val mAdapter = UsersAdapter(listOf())
+    private val mAdapter = UsersAdapter(listOf(), this)
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mSwipeView: SwipeRefreshLayout
 
@@ -39,6 +45,7 @@ class UsersFragment(private var mContext: Context) : Fragment() {
         mSwipeView.setOnRefreshListener {
             loadData()
         }
+        this.fragmentManager
         return view
     }
 
@@ -64,5 +71,23 @@ class UsersFragment(private var mContext: Context) : Fragment() {
             ).show()
             mSwipeView.isRefreshing = false
         }
+    }
+
+    override fun onItemClick(item: User, position: Int) {
+        userId = item.mId
+        val intent = Intent(context, UserDetailActivity::class.java)
+        val options = ActivityOptions
+            .makeSceneTransitionAnimation(
+                context as Activity,
+                this.view,
+                "transition"
+            )
+        intent.putExtra(USER_ID, userId)
+        startActivity(intent, options.toBundle())
+    }
+
+    companion object {
+        private var userId: Long = 0
+        private const val USER_ID = "USER_ID"
     }
 }

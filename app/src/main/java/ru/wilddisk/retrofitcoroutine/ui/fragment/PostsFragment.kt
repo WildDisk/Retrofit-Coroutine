@@ -15,12 +15,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import ru.wilddisk.retrofitcoroutine.R
+import ru.wilddisk.retrofitcoroutine.model.Post
 import ru.wilddisk.retrofitcoroutine.network.api.JsonApi
 import ru.wilddisk.retrofitcoroutine.ui.adapter.PostsAdapter
 
-class PostsFragment(private var mContext: Context) : Fragment() {
+class PostsFragment(private val mContext: Context) : Fragment(),
+    PostsAdapter.ItemPostClickListener {
     private val jsonApi = JsonApi.apiFactory()
-    private val mAdapter = PostsAdapter(listOf())
+    private val mAdapter = PostsAdapter(listOf(), this)
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mSwipeView: SwipeRefreshLayout
 
@@ -63,5 +65,13 @@ class PostsFragment(private var mContext: Context) : Fragment() {
             ).show()
             mSwipeView.isRefreshing = false
         }
+    }
+
+    override fun onItemClick(item: Post, position: Int) {
+        Toast.makeText(
+            this.context,
+            "id:$position - ${item.mTitle}",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

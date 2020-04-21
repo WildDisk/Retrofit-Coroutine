@@ -15,12 +15,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import ru.wilddisk.retrofitcoroutine.R
+import ru.wilddisk.retrofitcoroutine.model.Comment
 import ru.wilddisk.retrofitcoroutine.network.api.JsonApi
 import ru.wilddisk.retrofitcoroutine.ui.adapter.CommentsAdapter
 
-class CommentsFragment(private var mContext: Context) : Fragment() {
+class CommentsFragment(private val mContext: Context) : Fragment(),
+    CommentsAdapter.ItemCommentClickListener {
     private val jsonApi = JsonApi.apiFactory()
-    private val mAdapter = CommentsAdapter(listOf())
+    private val mAdapter = CommentsAdapter(listOf(), this)
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mSwipeView: SwipeRefreshLayout
 
@@ -63,5 +65,13 @@ class CommentsFragment(private var mContext: Context) : Fragment() {
             ).show()
             mSwipeView.isRefreshing = false
         }
+    }
+
+    override fun onItemClick(item: Comment, position: Int) {
+        Toast.makeText(
+            this.context,
+            "id:$position - ${item.mName}",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

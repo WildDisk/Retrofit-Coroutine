@@ -22,6 +22,7 @@ class UserDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user)
         intent.extras?.let { bundle = it }
         userId = bundle.getLong(USER_ID)
+        Log.d("!@#", "${bundle.getLong(USER_ID)}")
         loadData()
     }
 
